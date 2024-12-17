@@ -284,7 +284,7 @@ testGenerator("Who", generated)
 testGenerator("Why", generated)
 testGenerator("Where", generated)
 
-## 14. verify whether the generated sentences are jokes (using ‎BertForSequenceClassification)
+## 14. verify whether the generated sentences are jokes (using BertForSequenceClassification)
 # 1) define the tokenizer for the detector
 detector_tokenizer=BertTokenizer.from_pretrained("bert-base-uncased")
 
