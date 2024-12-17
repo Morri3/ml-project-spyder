@@ -4,7 +4,7 @@ Created on Tue Dec 10 20:27:50 2024
 
 @author: Yiqian Zhang
 
-*Training the BertForMaskedLM model (my version)*
+*BertForMaskedLM generator without detector (my version)*
 """
 from transformers import BertTokenizer, BertModel, BertForMaskedLM, BertLMHeadModel, AutoTokenizer
 import torch

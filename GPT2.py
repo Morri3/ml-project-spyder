@@ -4,7 +4,7 @@ Created on Sun Dec 15 19:39:47 2024
 
 @author: Yiqian Zhang
 
-*Training the GPT2 model (my version)*
+*GPT2 generator without detector (my version)*
 """
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
 import torch
