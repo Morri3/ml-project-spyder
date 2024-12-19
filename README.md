@@ -51,7 +51,7 @@ Tip*: This dataset is cited from a paper [The rJokes dataset: a large scale humo
 ```
 Tip**: These two datasets are preprocessed by the group member [Jiayu Zhang](https://github.com/zjy2414).<br/>
 Tip***: It is provided by this module.<br/>
-Tip****: **(IMPORTANT!)** 
+Tip****: **(It is important if you want to run the codes before the final version of models.)** 
 Because these two codes were used before the final version and they need to use the BERT model downloaded to the local environment, I uploaded the compressed package to Baidu Netdisk, please download it through [this link](https://pan.baidu.com/s/1Wh1RvZ1POHLQ8gr9JKlUcw?pwd=1111), or I recommend downloading the `bert-base-cased` model from the [Hugging Face](https://huggingface.co/google-bert/bert-base-cased).
 
 ---
