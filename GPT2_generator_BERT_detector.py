@@ -4,7 +4,7 @@ Created on Sun Dec 15 19:39:47 2024
 
 @author: Yiqian Zhang
 
-*Generator and Detector (no Trainer version)*
+Generator and Detector (Pytorch Neural Network architecture version)
 """
 from transformers import GPT2Tokenizer, GPT2LMHeadModel, BertForSequenceClassification, BertTokenizer
 import torch
@@ -29,6 +29,13 @@ tokenizer = GPT2Tokenizer.from_pretrained("openai-community/gpt2")
 
 ## 2-1. define the dataset for the generator
 class GeneratorDataset(Dataset):
+  """
+    define the dataset for the generator
+  
+    This is a dataset class, including initialization, loading data from csv, 
+    obtaining the length of the data and providing a method for returning one 
+    item on the index.
+  """
   def __init__(self):
     self.listOfJokes = self.loadJokes()
 
@@ -48,6 +55,13 @@ class GeneratorDataset(Dataset):
 
 ## 2-2. define the dataset for the detector
 class DetectorDataset(Dataset):
+  """
+    define the dataset for the detector
+  
+    This is a dataset class, including initialization, loading data from csv, 
+    obtaining the length of the data and providing a method for returning one 
+    item on the index.
+  """
   def __init__(self):
     self.listOfJokes = self.loadJokes()
 
@@ -68,13 +82,13 @@ class DetectorDataset(Dataset):
 
 ## 2-3. construct datasets for the generator and detector
 dataSet = GeneratorDataset()
-print("Generator dataSet's basic info: ",dataSet.listOfJokes)
+print("Generator dataSet's basic info: ", dataSet.listOfJokes)
 detector_dataSet = DetectorDataset()
-print("Detector dataSet's basic info: ",detector_dataSet.listOfJokes)
+print("Detector dataSet's basic info: ", detector_dataSet.listOfJokes)
 
 ## 3-1. get the train_dataset, test_dataset and validation_dataset (generator)
 # 1)obtain the first 4% of the original data as the dataset to be used (used for the dataset 'shortjokes.csv')
-small_size=int(len(dataSet) * 0.04)
+small_size = int(len(dataSet) * 0.04)
 small_dataSet = dataSet[:small_size]
 # 2)split datasets randomly (using 'random_split' method)
 train_data_size = int(len(small_dataSet['text']) * 0.8)
@@ -94,10 +108,10 @@ print("======== Here are the details of the generator datasets. ========")
 print("Train_dataset's size: ", len(train_dataSet))
 print("Test_dataset's size: ", len(test_dataSet))
 print("Validation_dataset's size: ", len(validation_dataSet))
-print("Train_dataset's batch size: ",train_loader.batch_size)
-print("Test_dataset's batch size: ",test_loader.batch_size)
-print("Validation_dataset's batch size: ",validation_loader.batch_size)
-print("The size of each data loader (train, test and validation): ",len(train_loader), len(test_loader), len(validation_loader))
+print("Train_dataset's batch size: ", train_loader.batch_size)
+print("Test_dataset's batch size: ", test_loader.batch_size)
+print("Validation_dataset's batch size: ", validation_loader.batch_size)
+print("The size of each data loader (train, test and validation): ", len(train_loader), len(test_loader), len(validation_loader))
 print("======== Above are the details of the generator datasets. ========")
 
 ## 4-1. get the train_dataset, test_dataset and validation_dataset (detector)
@@ -119,26 +133,33 @@ print("======== Here are the details of the detector datasets. ========")
 print("Train_dataset's size: ", len(train_dataSet_detector))
 print("Test_dataset's size: ", len(test_dataSet_detector))
 print("Validation_dataset's size: ", len(validation_dataSet_detector))
-print("Train_dataset's batch size: ",train_loader_detector.batch_size)
-print("Test_dataset's batch size: ",test_loader_detector.batch_size)
-print("Validation_dataset's batch size: ",validation_loader_detector.batch_size)
-print("The size of each data loader (train, test and validation): ",len(train_loader_detector), len(test_loader_detector), len(validation_loader_detector))
+print("Train_dataset's batch size: ", train_loader_detector.batch_size)
+print("Test_dataset's batch size: ", test_loader_detector.batch_size)
+print("Validation_dataset's batch size: ", validation_loader_detector.batch_size)
+print("The size of each data loader (train, test and validation): ", len(train_loader_detector), len(test_loader_detector), len(validation_loader_detector))
 print("======== Above are the details of the detector datasets. ========")
 
 ## 5. define the generator model
 class GPT2Model(torch.nn.Module):
+  """
+    define the Generator model
+  
+    This is a GPT2 model class in the form of Pytorch Neural Network Architecture. 
+    1. __init__(): get the GPT2LMHeadModel from the Hugging Face.
+    2. forward(): input a mapping into the model and return the word indices of prediction with loss.
+    3. generate(): use the trained model to generate sequences.
+  """
   def __init__(self):
     super(GPT2Model, self).__init__()
     self.gpt2 = GPT2LMHeadModel.from_pretrained("openai-community/gpt2")
-    tokenizer.pad_token = tokenizer.eos_token
+    tokenizer.pad_token = tokenizer.eos_token # by default, pad_token is not defined in the GPT2 model
     
   def forward(self, **tokenized_input):  
-    gpt2_output=self.gpt2(**tokenized_input) # input a mapping into the gpt2()
-    logits=gpt2_output.logits # [batch_size, sequence_length, config.vocab_size]    
+    gpt2_output = self.gpt2(**tokenized_input) # input a mapping into the gpt2()
+    logits = gpt2_output.logits 
     prediction = torch.argmax(logits, dim=-1) # convert the output to the word indices
     return gpt2_output.loss, prediction
 
-  # using the trained model to generate sequences
   def generate(self, gpt2_input, attention_mask, max_length, num_return_sequences,
                no_repeat_ngram_size, repetition_penalty, do_sample, top_k, top_p,
                temperature, tokenizer):
@@ -146,12 +167,12 @@ class GPT2Model(torch.nn.Module):
                               attention_mask=attention_mask, # attention mask
                               max_length=max_length, # maximum length of the generated sequences
                               num_return_sequences=num_return_sequences, # the number of returned sequences
-                              no_repeat_ngram_size=no_repeat_ngram_size, #避免重复出现长度=no_repeat_ngram_size的单词/词组
+                              no_repeat_ngram_size=no_repeat_ngram_size, # avoid repeated words/phrases of length equals no_repeat_ngram_size
 #                              repetition_penalty=repetition_penalty, # repetition penalty
-                              do_sample=do_sample, #是否启用采样策略，选择下一个token
-                              top_k=top_k, #每步选择概率最高的token数
-                              top_p=top_p, #进行Top-p sampling使用的累积概率阈值
-                              temperature=temperature, #调节随机性的温度参数
+                              do_sample=do_sample, # whether to use sampling strategy
+                              top_k=top_k, # the number of tokens with the highest probability selected at each step
+                              top_p=top_p, # accumulated probability threshold used for Top-p sampling
+                              temperature=temperature, # temperature parameter to adjust randomness
                               pad_token_id=tokenizer.pad_token_id,
                               )
 
@@ -161,7 +182,7 @@ device = torch.device('cuda' if cuda.is_available() else 'cpu')
 print("Using GPU or CPU? ", device)
 
 ## 7. restore the trained model / create a new model
-PATH = './GPT2_model.pth' # path
+PATH = './GENERATOR_model.pth' # path
 if os.path.exists(PATH):
     print("There exists the generator model.")
     model = torch.load(PATH)
@@ -173,12 +194,23 @@ else:
 
 ## 8. define the optimizer and hyperparameters
 learning_rate = 5e-5
-sum_loss = 0.0
 epochs = 3
 optimizer = optim.AdamW(model.parameters(), lr=learning_rate) # optimizer
 
 ## 9. train the model 
 def train(model, data_loader, optimizer, epochs):
+  """
+    train the Generator model
+  
+    Args:
+        model (GPT2Model): Generator model using GPT2LMHeadModel.
+        data_loader (DataLoader): Training data loader for the Generator.
+        optimizer (Optimizer): Optimizer using AdamW for the Generator.
+        epochs (int): Training epochs for the Generator.
+        
+    Returns:
+        train_generator_losses (list): Stored losses during training the Generator.
+  """
   print('Start training the generator.')
   model.train() # open the training mode
   train_generator_losses = [] # store the losses during training the generator
@@ -192,14 +224,13 @@ def train(model, data_loader, optimizer, epochs):
       inputs = data
       
       for j in range(len(inputs)): # traverse each input
-        # 2)here, each inputs represaents a joke, we should construct an input that conforms to the BERT format
-        tokenizer.pad_token = tokenizer.eos_token
-        tokenized_input = tokenizer(inputs[j], padding="max_length", truncation=True, max_length=128, return_tensors='pt').to(device)
-        tokenized_input["labels"] = tokenized_input["input_ids"]
+        # 2)here, each inputs represaents a joke, we should construct an input that conforms to the GPT2 format
+        tokenizer.pad_token = tokenizer.eos_token # by default, pad_token is not defined in the GPT2 model
+        tokenized_input = tokenizer(inputs[j], padding="max_length", truncation=True, max_length=128, return_tensors='pt').to(device) # use GPT2 tokenizer
+        tokenized_input["labels"] = tokenized_input["input_ids"] # there is no label in the 'shortjokes.csv', so we take the input_ids as the labels
         # 3)zero the parameter gradients
         optimizer.zero_grad()
         # 4)obtain the output and loss (here, labels = inputs)
-        #  【model(inputs) should be input that conforms to the BERT input format】
         loss, outputs = model(**tokenized_input) # equals to calling model.forward() 
         # 5)compute the gradient
         loss.backward()
@@ -209,7 +240,7 @@ def train(model, data_loader, optimizer, epochs):
         sum_loss += loss
         train_generator_losses.append(loss.cpu().detach()) # move to the CPU and separate gradients
 
-      # 8)print every 200 batches
+      # 8)print losses of each 200 batches
       if i % 200 == 199:
         print(f'[{epoch + 1}, {i + 1:5d}]    loss: {sum_loss / 200:.3f}')
         sum_loss = 0.0
@@ -218,18 +249,29 @@ def train(model, data_loader, optimizer, epochs):
   print('Finished training the generator.')
   return train_generator_losses
 train_generator_losses = train(model, train_loader, optimizer, epochs)
-##print("train_generator_losses: ",len(train_generator_losses))
+##print("train_generator_losses: ", len(train_generator_losses))
 
-## 10. save the model
+## 10. save the generator model
 torch.save(model, PATH)
 
 ## 11. evaluate the model
 def evaluate(model, data_loader, epochs):
+  """
+    evaluate the Generator model
+  
+    Args:
+        model (GPT2Model): Generator model using GPT2LMHeadModel.
+        data_loader (DataLoader): Validation data loader for the Generator.
+        epochs (int): Evaluation epochs for the Generator.
+        
+    Returns:
+        evaluate_generator_losses (list): Stored losses during evaluating the Generator.
+  """
   print('Start evaluating the generator.')
   model.eval() # open the evaluation mode
   evaluate_generator_losses = [] # store the losses during evaluating the generator
   for epoch in range(epochs): # traverse each epoch
-    losses = [] # store each loss during the evaluation
+    losses = [] # store each loss in each epoch
     
     for i, data in enumerate(data_loader, 0):
       # 1)obtain the inputs
@@ -237,16 +279,16 @@ def evaluate(model, data_loader, epochs):
       
       for j in range(len(inputs)): # traverse each input
         with torch.no_grad():  
-          # 2)here, each inputs represents a joke, we should construct an input that conforms to the BERT format
-          tokenizer.pad_token = tokenizer.eos_token
-          tokenized_input = tokenizer(inputs[j], padding="max_length", truncation=True, max_length=128, return_tensors='pt').to(device)
-          tokenized_input["labels"] = tokenized_input["input_ids"]
+          # 2)here, each inputs represents a joke, we should construct an input that conforms to the GPT2 format
+          tokenizer.pad_token = tokenizer.eos_token # by default, pad_token is not defined in the GPT2 model
+          tokenized_input = tokenizer(inputs[j], padding="max_length", truncation=True, max_length=128, return_tensors='pt').to(device) # use GPT2 tokenizer
+          tokenized_input["labels"] = tokenized_input["input_ids"] # there is no label in the 'shortjokes.csv', so we take the input_ids as the labels
           # 3)get the output and loss
           loss, outputs = model(**tokenized_input) # equals to calling model.forward() 
-          losses.append(loss.repeat(batch_size))
+          losses.append(loss.repeat(batch_size)) # repeat batch_size times to enable each input in the current batch to have the loss
           evaluate_generator_losses.append(loss.cpu()) # move to the CPU
-    losses = torch.cat(losses) # concat each loss tensor into one tensor
-    losses = losses[: len(validation_dataSet)]
+    losses = torch.cat(losses) # in each input, concat each loss tensor into one tensor
+    losses = losses[: len(validation_dataSet)] # guarantee the number of losses ​​corresponds to the number of samples in the evaluation dataset
     
     # 4)compute the perplexity
     try:
@@ -257,28 +299,37 @@ def evaluate(model, data_loader, epochs):
   print('Finished evaluating the generator.')
   return evaluate_generator_losses
 evaluate_generator_losses = evaluate(model, validation_loader, epochs)  
-##print("evaluate_generator_losses: ",len(evaluate_generator_losses))
+##print("evaluate_generator_losses: ", len(evaluate_generator_losses))
 
 ## 12. define the text procedure
 def generate_text(input_text):
-  # 1.construct an input that conforms to the BERT format
-  gpt2_input=tokenizer.encode(input_text, return_tensors="pt").to(device) # return PyTorch tensor
+  """
+    generate some sentences after training and evaluating the Generator
+  
+    Args:
+        input_text (str): Start words for generating sentences.
+        
+    Returns:
+        jokes (list): A list storing generated sentences.
+  """
+  # 1.construct an input that conforms to the GPT2 format
+  gpt2_input = tokenizer.encode(input_text, return_tensors="pt").to(device) # return PyTorch tensor
   # 2.construct the attention_mark(using torch.ones to generate a tensor with value 1)
-  attention_mask=torch.ones(gpt2_input.shape, dtype=torch.long, device=gpt2_input.device)
+  attention_mask = torch.ones(gpt2_input.shape, dtype=torch.long, device=gpt2_input.device)
   # 3.using Top-k sampling, Top-p sampling, temperature sampling(without beam-search decoding)
   with torch.no_grad():
-    outputs=model.generate(gpt2_input, # input
-                           attention_mask, # attention mask
-                           max_length=80, # maximum length of the generated sequences
-                           num_return_sequences=1, # the number of returned sequences
-                           no_repeat_ngram_size=2, #避免重复出现长度=no_repeat_ngram_size的单词/词组
-                           repetition_penalty=1.83, # repetition penalty (not used)
-                           do_sample=True, #是否启用采样策略，选择下一个token
-                           top_k=50, #每步选择概率最高的token数
-                           top_p=0.92, #进行Top-p sampling使用的累积概率阈值
-                           temperature=0.7, #调节随机性的温度参数
-                           tokenizer=tokenizer)
-  # 4.decode each joke of the output and get the generated sentence (default: 1)
+    outputs = model.generate(gpt2_input, # input
+                             attention_mask, # attention mask
+                             max_length=80, # maximum length of the generated sequences
+                             num_return_sequences=1, # the number of returned sequences
+                             no_repeat_ngram_size=2, # avoid repeated words/phrases of length equals no_repeat_ngram_size
+                             repetition_penalty=1.83, # repetition penalty (not used)
+                             do_sample=True, # whether to use sampling strategy
+                             top_k=50, # the number of tokens with the highest probability selected at each step
+                             top_p=0.92, # accumulated probability threshold used for Top-p sampling
+                             temperature=0.7, # temperature parameter to adjust randomness
+                             tokenizer=tokenizer)
+  # 4.decode each joke of the output and get the generated sentence
   jokes = []
   for output in outputs:
     jokes.append(tokenizer.decode(output, skip_special_tokens=True))
@@ -286,7 +337,17 @@ def generate_text(input_text):
 
 ## 13. test the model
 def test_generator(text, generated):
-  jokes=generate_text(text)
+  """
+    test the Generator model
+  
+    Args:
+        text (str): Start words for generating sentences.
+        generated (list): A list to store generated sentences.
+        
+    Returns:
+        generated (list): A list storing generated sentences.
+  """
+  jokes = generate_text(text)
   for i, joke in enumerate(jokes, 0):
     print(f"Generated joke: {joke}")
     generated.append(joke)
@@ -300,25 +361,33 @@ test_generator("Who", generated)
 test_generator("Why", generated)
 test_generator("Where", generated)
 
-## 14. verify whether the generated sentences are jokes (using BertForSequenceClassification)
+## 14. verify whether the generated sentences are jokes (using ‎BertForSequenceClassification model)
 # 1) define the tokenizer for the detector
-detector_tokenizer=BertTokenizer.from_pretrained("bert-base-uncased")
+detector_tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
 
 # 2) define the detector model
 class DetectorModel(torch.nn.Module):
+  """
+    define the Detector model
+  
+    This is a BERT model class in the form of Pytorch Neural Network Architecture. 
+    1. __init__(): get the BertForSequenceClassification from the Hugging Face.
+    2. forward(): input a mapping into the model and return the word indices of prediction with loss.
+    3. detect(): as same as the forward(), but there is no need to input the labels here.
+  """
   def __init__(self):
     super(DetectorModel, self).__init__()
     self.detector = BertForSequenceClassification.from_pretrained("bert-base-uncased")
     
   def forward(self, input_ids, attention_mask, token_type_ids, label_ids): # with inputting the labels
-    detector_output=self.detector(input_ids, attention_mask=attention_mask, token_type_ids=token_type_ids, labels=label_ids) # input a mapping into the bert()
-    logits=detector_output.logits # [batch_size, sequence_length, config.vocab_size]
+    detector_output = self.detector(input_ids, attention_mask=attention_mask, token_type_ids=token_type_ids, labels=label_ids) # input a mapping into the detector()
+    logits = detector_output.logits
     prediction = torch.argmax(logits, dim=-1) # convert the output to the word indices
     return detector_output.loss, prediction
 
   def detect(self, **tokenized_input): # here, we don't input the labels
-    detector_output=self.detector(**tokenized_input) # input a mapping into the gpt2()
-    logits=detector_output.logits # [batch_size, sequence_length, config.vocab_size]    
+    detector_output = self.detector(**tokenized_input) # input a mapping into the detector()
+    logits = detector_output.logits
     prediction = torch.argmax(logits, dim=-1) # convert the output to the word indices
     return prediction
 
@@ -334,16 +403,29 @@ else:
     print("We need to create a detector model.")
     detector_model = DetectorModel()
     detector_model.to(device)
-##print("detector_model: ",detector_model)
+##print("detector_model: ", detector_model)
 
 # 5) define hyperparameters
-learning_rate_detector=1e-4
+learning_rate_detector = 1e-4
 epochs_detector = 3
 criterion = nn.CrossEntropyLoss() # loss function
 optimizer_detector = optim.AdamW(detector_model.parameters(), lr=learning_rate_detector) # optimizer
 
 # 6) train the detector model
 def train_detector(model, tokenizer, data_loader, optimizer, epochs):
+  """
+    train the Detector model
+  
+    Args:
+        model (DetectorModel): Detector model using BertForSequenceClassification.
+        tokenizer (Tokenizer): The tokenizer based on WordPiece.
+        data_loader (DataLoader): Training data loader for the Detector.
+        optimizer (Optimizer): Optimizer using AdamW for the Detector.
+        epochs (int): Training epochs for the Detector.
+        
+    Returns:
+        train_detector_losses (list): Stored losses during training the Detector.
+  """
   print('Start training the detector.')
   model.train() # open the training mode
   train_detector_losses = [] # store the losses during training the detector
@@ -356,21 +438,20 @@ def train_detector(model, tokenizer, data_loader, optimizer, epochs):
       # 1)obtain the inputs
       inputs = data
       
-      for j in range(len(inputs['text'])): # traverse each input
-        # 2)here, each inputs represents a joke, we should construct an input that conforms to the BERT format
-        detector_input=tokenizer(inputs['text'][j], # input text(need to get the string in the array)
-                                 max_length=128, # change from 512 to 128
-                                 padding=True,
-                                 truncation=True,
-                                 return_tensors="pt").to(device) # return PyTorch tensor
-        input_ids=detector_input['input_ids']
-        attention_mask=detector_input['attention_mask']
-        token_type_ids=detector_input['token_type_ids']
-        label_ids=inputs['label'][j].unsqueeze(0).to(device) # use unsqueeze() to convert a scalar tensor into a tensor with shape (batch_size,)
+      for j in range(len(inputs['text'])): # traverse each input (here, inputs have two elements 'text' and 'label', which are different from the generator's dataset)
+        # 2)here, we should construct an input that conforms to the BERT format
+        detector_input = tokenizer(inputs['text'][j], # input text(need to get the string in the array)
+                                   max_length=128, # change from 512 to 128
+                                   padding=True,
+                                   truncation=True,
+                                   return_tensors="pt").to(device) # return PyTorch tensor
+        input_ids = detector_input['input_ids']
+        attention_mask = detector_input['attention_mask']
+        token_type_ids = detector_input['token_type_ids']
+        label_ids = inputs['label'][j].unsqueeze(0).to(device) # use unsqueeze() to convert a scalar tensor into a tensor with shape (batch_size,)
         # 3)zero the parameter gradients
         optimizer.zero_grad()
-        # 4)obtain the output and loss (here, labels = inputs)
-        #  【model(inputs) should be input that conforms to the BERT input format】
+        # 4)obtain the output and loss
         loss, outputs = model(input_ids, attention_mask, token_type_ids, label_ids) # equals to calling model.forward()
         # 5)compute the gradient
         loss.backward()
@@ -380,7 +461,7 @@ def train_detector(model, tokenizer, data_loader, optimizer, epochs):
         sum_loss += loss
         train_detector_losses.append(loss.cpu().detach()) # move to the CPU and separate gradients
       
-      # 8)print every 200 batches
+      # 8)print losses of each 200 batches
       if i % 200 == 199:
         print(f'[{epoch + 1}, {i + 1:5d}]    loss: {sum_loss / 200:.3f}')
         sum_loss = 0.0
@@ -389,41 +470,53 @@ def train_detector(model, tokenizer, data_loader, optimizer, epochs):
   print('Finished training the detector.')
   return train_detector_losses
 train_detector_losses = train_detector(detector_model, detector_tokenizer, train_loader_detector, optimizer_detector, epochs_detector)
-##print("train_detector_losses: ",len(train_detector_losses))
+##print("train_detector_losses: ", len(train_detector_losses))
 
 # 7) save the detector model
 torch.save(detector_model, DETECTOR_PATH)
 
 # 8) evaluate the detector model
 def evaluate_detector(model, tokenizer, data_loader, epochs):
+  """
+    evaluate the Detector model
+  
+    Args:
+        model (DetectorModel): Detector model using BertForSequenceClassification.
+        tokenizer (Tokenizer): The tokenizer based on WordPiece.
+        data_loader (DataLoader): Validation data loader for the Detector.
+        epochs (int): Evaluation epochs for the Detector.
+        
+    Returns:
+        evaluate_detector_losses (list): Stored losses during evaluating the Detector.
+  """
   print('Start evaluating the detector.')
   model.eval() # open the evaluation mode
   evaluate_detector_losses = [] # store the losses during evaluating the detector
   for epoch in range(epochs): # traverse each epoch
-    losses = [] # store each loss during the evaluation
+    losses = [] # store each loss in each epoch
     
     for i, data in enumerate(data_loader, 0):
       # 1)obtain the inputs
       inputs = data
       
-      for j in range(len(inputs['text'])): # traverse each input
+      for j in range(len(inputs['text'])): # traverse each input (here, inputs have two elements 'text' and 'label', which are different from the generator's dataset)
         with torch.no_grad():  
-          # 2)here, each inputs represents a joke, we should construct an input that conforms to the BERT format
-          detector_input=tokenizer(inputs['text'][j], # input text(need to get the string in the array)
-                                   max_length=128, # change from 512 to 128
-                                   padding=True,
-                                   truncation=True,
-                                   return_tensors="pt").to(device) # return PyTorch tensor
-          input_ids=detector_input['input_ids']
-          attention_mask=detector_input['attention_mask']
-          token_type_ids=detector_input['token_type_ids']
-          label_ids=inputs['label'][j].unsqueeze(0).to(device) # use unsqueeze() to convert a scalar tensor into a tensor with shape (batch_size,)
+          # 2)here, we should construct an input that conforms to the BERT format
+          detector_input = tokenizer(inputs['text'][j], # input text(need to get the string in the array)
+                                     max_length=128, # change from 512 to 128
+                                     padding=True,
+                                     truncation=True,
+                                     return_tensors="pt").to(device) # return PyTorch tensor
+          input_ids = detector_input['input_ids']
+          attention_mask = detector_input['attention_mask']
+          token_type_ids = detector_input['token_type_ids']
+          label_ids = inputs['label'][j].unsqueeze(0).to(device) # use unsqueeze() to convert a scalar tensor into a tensor with shape (batch_size,)
           # 3)get the output and loss
           loss, outputs = model(input_ids, attention_mask, token_type_ids, label_ids) # equals to calling model.forward()
-          losses.append(loss.repeat(batch_size))
+          losses.append(loss.repeat(batch_size)) # repeat batch_size times to enable each input in the current batch to have the loss
           evaluate_detector_losses.append(loss.cpu()) # move to the CPU
-    losses = torch.cat(losses) # concat each loss tensor into one tensor
-    losses = losses[: len(validation_dataSet)]
+    losses = torch.cat(losses) # in each input, concat each loss tensor into one tensor
+    losses = losses[: len(validation_dataSet)] # guarantee the number of losses ​​corresponds to the number of samples in the evaluation dataset
     
     # 4)compute the perplexity
     try:
@@ -434,10 +527,18 @@ def evaluate_detector(model, tokenizer, data_loader, epochs):
   print('Finished evaluating the detector.')
   return evaluate_detector_losses
 evaluate_detector_losses = evaluate_detector(detector_model, detector_tokenizer, validation_loader_detector, epochs_detector) 
-##print("evaluate_detector_losses: ",len(evaluate_detector_losses))
+##print("evaluate_detector_losses: ", len(evaluate_detector_losses))
 
 # 9) verify generated jokes
 def verify_jokes(model, tokenizer, texts):
+  """
+    verify generated sentences whether they are jokes
+  
+    Args:
+        model (DetectorModel): Detector model using BertForSequenceClassification.
+        tokenizer (Tokenizer): The tokenizer based on WordPiece.
+        texts (list): A list storing generated sentences.
+  """
   flag = False # check whether there are jokes in the generated sentences
   for text in texts:
     detector_input = tokenizer(text, return_tensors="pt", padding=True, truncation=True, max_length=512).to(device)
@@ -451,6 +552,17 @@ verify_jokes(detector_model, detector_tokenizer, generated)
 
 ## 15. show images of losses for the generator and detector (pyplot-style)
 def show_losses(title, epochs, train_dataset_size, validation_dataset_size, train_losses, evaluate_losses):
+  """
+    show images of losses for the generator and detector (pyplot-style)
+  
+    Args:
+        title (str): The title of the graph.
+        epochs (int): Training or Evaluation epochs for the Generator or Detector.
+        train_dataset_size (int): The size of the training dataset.
+        validation_dataset_size (int): The size of the validation dataset.
+        train_losses (list): A list storing losses during training of the Generator or Detector.
+        evaluate_losses (list): A list storing losses during evaluation of the Generator or Detector.
+  """
   plt.figure(figsize=(6, 3), layout='constrained') # a figure with a grid of Axes
   plt.plot(range(epochs*train_dataset_size), train_losses, label="Training Loss", color="red") # train
   plt.plot(range(epochs*validation_dataset_size), evaluate_losses, label="Evaluation Loss", color="blue") # validation
@@ -458,12 +570,14 @@ def show_losses(title, epochs, train_dataset_size, validation_dataset_size, trai
   plt.ylabel("Losses") # ylabel
   plt.title(title) # title
   plt.legend(['Training', 'Evaluating'], loc='upper right') # legend
+  # save graphs in a relative path
   SAVE_DIR_PATH = './Images'
   if not os.path.exists(SAVE_DIR_PATH): # create the path if it doesn't exist
     os.makedirs(SAVE_DIR_PATH)
   file_name = SAVE_DIR_PATH + '/' + title + '.png'
   plt.savefig(file_name, dpi=300) # save graphs
-  plt.show() # show graphs
+  # show graphs
+  plt.show()
 show_losses( # generator
     "Generator's training and evaluation results", epochs, 
     len(train_dataSet), len(validation_dataSet),
@@ -475,7 +589,7 @@ show_losses( # detector
     train_detector_losses, evaluate_detector_losses
 )
 
-## 16. end time of the whole process and output it
+## 16. obtain the end time of the whole process and output it
 end_time = time.time()
 consumed_time = end_time - start_time
 print(f"The whole process consumed: {consumed_time: .2f} seconds.")

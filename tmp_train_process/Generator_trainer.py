@@ -23,18 +23,26 @@ import random
 
 ## 1. create a dataset for 'dev-small.csv'
 def get_data(file_path):
+  """
+    create a dataset for 'dev-small.csv'
+  
+    Args:
+        file_path (str): The file path of the dataset.
+    Returns:
+        Dataset.from_pandas(df[["text"]]) (Dataset): The dataset using 'dev-small.csv' dataset for the Generator.
+  """
   df = pd.read_csv(file_path)
   df["text"] = df["text"].astype(str)
   return Dataset.from_pandas(df[["text"]])
 dataSet = get_data('./dev-small.csv') 
 print("dataSet: ", dataSet)
 
-## 2.set up the device for GPU usage
+## 2. set up the device for GPU usage
 torch.cuda.empty_cache()
 device = torch.device('cuda' if cuda.is_available() else 'cpu')
 print("Using GPU or CPU? ", device)
 
-## 3.define the model and create some settings
+## 3. define the model and create some settings
 # 1) GPT2
 ##tokenizer = GPT2Tokenizer.from_pretrained("openai-community/gpt2")
 ##model = GPT2LMHeadModel.from_pretrained("openai-community/gpt2")
@@ -45,14 +53,24 @@ model = BertLMHeadModel.from_pretrained("./bert-base-cased")
 tokenizer.eos_token = '[SEP]' # specify the eos_token
 tokenizer.pad_token = '[SEP]' # specify the pad_token
 
-## 4.tokenized the input
+## 4. tokenized the input
 def tokenize_function(data, tokenizer):
+  """
+    tokenized the input
+  
+    Args:
+        data (dict): Each data in the dataset.
+        tokenizer (Tokenizer): The tokenizer based on WordPiece.
+        
+    Returns:
+        tokenized_output (dict): Tokenized output.
+  """
   tokenized_output = tokenizer(data["text"], padding="max_length", truncation=True, max_length=128, return_tensors="pt")
   tokenized_output["labels"] = tokenized_output["input_ids"] # take input_ids as the labels
   return tokenized_output
 tokenized_datasets = dataSet.map(lambda x: tokenize_function(x, tokenizer), batched=True) # traverse each data in the dataset to get tokenized datasets
 
-## 5.defien the arguments for training
+## 5. define the arguments for training
 training_args = TrainingArguments(
 ##  output_dir="./GPT2_Model_Trainer", # store the outputs of training
   output_dir="./BERT_Model_Trainer", # store the outputs of training
@@ -68,7 +86,7 @@ training_args = TrainingArguments(
 )
 ##print("training_args: ", training_args)
 
-## 7.define the trainer
+## 6. define the trainer
 trainer = Trainer(
   model=model,
   args=training_args,
@@ -77,10 +95,10 @@ trainer = Trainer(
 )
 ##print("trainer: ", trainer)
 
-## 8.begin to train the model
+## 7. begin to train the model
 trainer.train()
 
-## 9.save the model
+## 8. save the model
 # 1) GPT2
 ##model.save_pretrained("./GPT2_Model_Trainer")
 ##tokenizer.save_pretrained("./GPT2_Model_Trainer")
@@ -88,11 +106,11 @@ trainer.train()
 model.save_pretrained("./Bert_Model_Trainer")
 tokenizer.save_pretrained("./Bert_Model_Trainer")
 
-## 10.randomly choose the start words
+## 9. randomly choose the start words
 start_words = ["What", "How", "Why", "When", "Who", "If", "Where", "Which", "Whose", "Whether"]
 input_text = random.choice(start_words)
 
-## 11.test the model
+## 10. test the model
 inputs = tokenizer(input_text, return_tensors="pt").to(device)
 outputs = model.generate(
     inputs["input_ids"],
@@ -109,6 +127,6 @@ outputs = model.generate(
 #    pad_token_id=tokenizer.encode(tokenizer.pad_token)[0]
 )
 
-## 12.decode generated text
+## 11. decode generated text
 generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
 print("Generated joke: ", generated_text)

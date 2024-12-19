@@ -21,6 +21,13 @@ from datasets import Dataset
 
 ## 1. define the dataset
 class JokeDataset(Dataset):
+  """
+    define the dataset for the Generator
+  
+    This is a dataset class, including initialization, loading data from csv, 
+    obtaining the length of the data and providing a method for returning one 
+    item on the index.
+  """
   def __init__(self):
     self.listOfJokes = self.loadJokes()
 
@@ -77,6 +84,14 @@ print("======== Above are the details of the generator datasets. ========")
 
 ## 5. define the model
 class BERTModel(torch.nn.Module):
+  """
+    define the Generator model
+  
+    This is a BERT model class in the form of Pytorch Neural Network Architecture. 
+    1. __init__(): get the BertLMHeadModel from the Hugging Face.
+    2. forward(): input a mapping into the model and return the word indices of prediction with loss.
+    3. generate(): use the trained model to generate sequences.
+  """
   def __init__(self):
     super(BERTModel, self).__init__()
     self.bert = BertLMHeadModel.from_pretrained("./bert-base-cased") # case sensitive
@@ -131,6 +146,15 @@ tokenizer = AutoTokenizer.from_pretrained("./bert-base-cased") # tokenizer
 
 ## 9. train the model 
 def train(model, data_loader, optimizer, epochs):
+  """
+    train the Generator model
+  
+    Args:
+        model (BERTModel): Generator model using BertLMHeadModel.
+        data_loader (DataLoader): Training data loader for the Generator.
+        optimizer (Optimizer): Optimizer using AdamW for the Generator.
+        epochs (int): Training epochs for the Generator.
+  """
   print('Start training.')
   model.train() # open the training mode
   for epoch in range(epochs): # traverse each epoch
@@ -177,6 +201,14 @@ torch.save(model, PATH)
 
 ## 11. evaluate the model
 def evaluate(model, data_loader, epochs):
+  """
+    evaluate the Generator model
+  
+    Args:
+        model (BERTModel): Generator model using BertLMHeadModel.
+        data_loader (DataLoader): Validation data loader for the Generator.
+        epochs (int): Evaluation epochs for the Generator.
+  """
   print('Start evaluation.')
   model.eval() # open the evaluation mode
   for epoch in range(epochs): # traverse each epoch
@@ -214,6 +246,15 @@ evaluate(model, validation_loader, epochs)
 
 ## 12. define the text procedure
 def generate_text(input_text):
+  """
+    generate some sentences after training and evaluating the Generator
+  
+    Args:
+        input_text (str): Start words for generating sentences.
+        
+    Returns:
+        jokes (list): A list storing generated sentences.
+  """
   # 1)construct an input that conforms to the BERT format
   bert_input = tokenizer.encode(input_text, return_tensors="pt").to(device) # return PyTorch tensor
   # 2)construct the attention_mark(using torch.ones to generate a tensor with value 1)
@@ -239,6 +280,12 @@ def generate_text(input_text):
 
 ## 13. test the model
 def test(text):
+  """
+    test the Generator model
+  
+    Args:
+        text (str): Start words for generating sentences.
+  """
   jokes = generate_text(text)
   for i, joke in enumerate(jokes, 0):
     print(f"Generated joke: {joke}")
