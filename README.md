@@ -36,20 +36,8 @@ In this repository, each code is run independently. Here is its structure using 
 > │&nbsp;&nbsp;&nbsp;&nbsp;└─ `shortjokes.csv` ***<br/>
 > │      <br/>
 > └─tmp_train_process # used during the project, not used in the final version<br/>
-> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ `BERT_no_trainer.py` # the initial version of trying to use BERT as the joke generator in the form of Pytorch Neural Network architecture, without the detector<br/>
-> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ `Generator_trainer.py` # trying to use Trainer to train the GPT2 (taken as the joke generator), without the detector<br/>
-> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br/>
-> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ bert-base-cased # the BERT model downloaded to the local environment<br/>
-> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ `config.json`<br/>
-> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ `flax_model.msgpack`<br/>
-> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ `gitattributes`<br/>
-> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ `model.safetensors`<br/>
-> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ `pytorch_model.bin`<br/>
-> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ `README.md`<br/>
-> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ `tf_model.h5`<br/>
-> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ `tokenizer.json`<br/>
-> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ `tokenizer_config.json`<br/>
-> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ `vocab.txt`<br/>
+> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ `BERT_no_trainer.py` **** # the initial version of trying to use BERT as the joke generator in the form of Pytorch Neural Network architecture, without the detector<br/>
+> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ `Generator_trainer.py` **** # trying to use Trainer to train the GPT2 (taken as the joke generator), without the detector<br/>
 
 Tip*: This dataset is cited from a paper [The rJokes dataset: a large scale humor collection](https://aclanthology.org/2020.lrec-1.753/)
 ```
@@ -62,7 +50,9 @@ Tip*: This dataset is cited from a paper [The rJokes dataset: a large scale humo
 }
 ```
 Tip**: These two datasets are preprocessed by the group member [Jiayu Zhang](https://github.com/zjy2414).<br/>
-Tip***: It is provided by this module.
+Tip***: It is provided by this module.<br/>
+Tip****: **(IMPORTANT!)** 
+Because these two codes used before the final version and they need to use the BERT model downloaded to the local environment, I uploaded the compressed package to Baidu Netdisk, please download it through [this](https://pan.baidu.com/s/1Wh1RvZ1POHLQ8gr9JKlUcw?pwd=1111); or I recommend downloading the `bert-base-cased` model from the [Hugging Face](https://huggingface.co/google-bert/bert-base-cased).
 
 ---
 
