@@ -2,7 +2,7 @@
 This is the coursework of COMP4132 Advanced Topics in Machine Learning (2024-2025).
 
 ## Why do we have two GitHub repositories?
-This repository aims to train and test the joke generator and detector using the GPT2 and BERT models in the form of Pytorch Neural Network architecture. 
+This repository aims to train and test the joke generator and detector using the GPT2 and BERT models in the form of Pytorch Neural Network architecture (see the section [The inspiration for the project](#inspiration)). 
 
 Another repository seeks to train and test the joke generator and detector by using a Trainer provided by the Huggingface.
 
@@ -26,9 +26,9 @@ Another repository seeks to train and test the joke generator and detector by us
   python [file_name].py
 ```
 
-Here, the [file_name] should be set to the file's real name, including _BERT_, _GPT2_ and _GPT2_generator_detector_. 
+Here, the [file_name] should be set to the file's real name, including `BERT`, `GPT2` and `GPT2_generator_detector`. 
 
-For instance, if you want to run the 'GPT2.py', you should input the following command:
+For instance, if you want to run the `GPT2.py`, you should input the following command:
 
 ```bash
   python GPT2.py
@@ -40,17 +40,17 @@ For instance, if you want to run the 'GPT2.py', you should input the following c
 In this repository, each code is run independently. Here is its structure using `tree /f > tree.txt` with manual adjustments of styles.
 
 > .
-> │─ BERT.py # the initial version of trying using BERT as the joke generator, without the detector
-> │─ GPT2.py # the version of trying to use GPT2 as the joke generator, without the detector
-> │─ GPT2_generator_detector # the final version of joke generator (GPT2) and detector (BERT)
-> │─ README.md
-> │─ tree.txt # the tree structure of this repository
+> │─ `BERT.py` # the initial version of trying using BERT as the joke generator, without the detector
+> │─ `GPT2.py` # the version of trying to use GPT2 as the joke generator, without the detector
+> │─ `GPT2_generator_BERT_detector.py` # the final version of joke generator (GPT2) and detector (BERT)
+> │─ `README.md`
+> │─ `tree.txt` # the tree structure of this repository
 > │  
-> └─dataset # dataset used in this repository
-> &nbsp;&nbsp;&nbsp;&nbsp; │─ dev-middle.csv **
-> &nbsp;&nbsp;&nbsp;&nbsp; │─ dev-small.csv **
-> &nbsp;&nbsp;&nbsp;&nbsp; │─ dev.csv *
-> &nbsp;&nbsp;&nbsp;&nbsp; └─ shortjokes.csv ***
+> └─ dataset # dataset used in this repository
+> &nbsp;&nbsp;&nbsp;&nbsp; │─ `dev-middle.csv` **
+> &nbsp;&nbsp;&nbsp;&nbsp; │─ `dev-small.csv` **
+> &nbsp;&nbsp;&nbsp;&nbsp; │─ `dev.csv` *
+> &nbsp;&nbsp;&nbsp;&nbsp; └─ `shortjokes.csv` ***
 
 Tip*: This dataset is cited from a paper [The rJokes dataset: a large scale humor collection](https://aclanthology.org/2020.lrec-1.753/)
 ```
@@ -92,4 +92,7 @@ Tip****: Using this library to create the datasets.
 Tip*****: It aims to show images of losses for the generator and detector in the form of pyplot-style.
 
 ## The inspiration for the project
-
+### Code style
+<a id="inspiration"></a>
+In this repository, I coded in the form of Pytorch Neural Network architecture. 
+In the beginning of the project, **...**
