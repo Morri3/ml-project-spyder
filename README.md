@@ -39,18 +39,20 @@ For instance, if you want to run the `GPT2.py`, you should input the following c
 ## What is the structure of this repository?
 In this repository, each code is run independently. Here is its structure using `tree /f > tree.txt` with manual adjustments of styles.
 
-> .<br/>
-> │─ `BERT.py` # the initial version of trying using BERT as the joke generator, without the detector<br/>
-> │─ `GPT2.py` # the version of trying to use GPT2 as the joke generator, without the detector<br/>
-> │─ `GPT2_generator_BERT_detector.py` # the final version of joke generator (GPT2) and detector (BERT)<br/>
-> │─ `README.md`<br/>
-> │─ `tree.txt` # the tree structure of this repository<br/>
-> │  <br/>
-> └─ dataset # dataset used in this repository<br/>
-> &nbsp;&nbsp;&nbsp;&nbsp; │─ `dev-middle.csv` **<br/>
-> &nbsp;&nbsp;&nbsp;&nbsp; │─ `dev-small.csv` **<br/>
-> &nbsp;&nbsp;&nbsp;&nbsp; │─ `dev.csv` *<br/>
-> &nbsp;&nbsp;&nbsp;&nbsp; └─ `shortjokes.csv` ***<br/>
+> .
+> ├─ `GPT2_generator_BERT_detector.py` # the final version of joke generator (GPT2) and detector (BERT)
+> ├─ `README.md`
+> ├─ `tree.txt` # the tree structure of this repository
+> │  
+> ├─dataset # dataset used in this repository
+> │&nbsp;&nbsp;&nbsp;&nbsp;├─ `dev-middle.csv` **
+> │&nbsp;&nbsp;&nbsp;&nbsp;├─ `dev-small.csv` **
+> │&nbsp;&nbsp;&nbsp;&nbsp;├─ `dev.csv` *
+> │&nbsp;&nbsp;&nbsp;&nbsp;└─ `shortjokes.csv` ***
+> │      
+> └─tmp_train_process # used during the project, not used in the final version
+> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ `BERT_no_trainer.py` # the initial version of trying to use BERT as the joke generator in the form of Pytorch Neural Network architecture, without the detector
+> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ `Generator_trainer.py` # trying to use Trainer to train the GPT2 (taken as the joke generator), without the detector
 
 Tip*: This dataset is cited from a paper [The rJokes dataset: a large scale humor collection](https://aclanthology.org/2020.lrec-1.753/)
 ```
