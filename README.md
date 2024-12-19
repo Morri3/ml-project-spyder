@@ -39,18 +39,18 @@ For instance, if you want to run the `GPT2.py`, you should input the following c
 ## What is the structure of this repository?
 In this repository, each code is run independently. Here is its structure using `tree /f > tree.txt` with manual adjustments of styles.
 
-> .
-> │─ `BERT.py` # the initial version of trying using BERT as the joke generator, without the detector
-> │─ `GPT2.py` # the version of trying to use GPT2 as the joke generator, without the detector
-> │─ `GPT2_generator_BERT_detector.py` # the final version of joke generator (GPT2) and detector (BERT)
-> │─ `README.md`
-> │─ `tree.txt` # the tree structure of this repository
-> │  
-> └─ dataset # dataset used in this repository
-> &nbsp;&nbsp;&nbsp;&nbsp; │─ `dev-middle.csv` **
-> &nbsp;&nbsp;&nbsp;&nbsp; │─ `dev-small.csv` **
-> &nbsp;&nbsp;&nbsp;&nbsp; │─ `dev.csv` *
-> &nbsp;&nbsp;&nbsp;&nbsp; └─ `shortjokes.csv` ***
+> .<br/>
+> │─ `BERT.py` # the initial version of trying using BERT as the joke generator, without the detector<br/>
+> │─ `GPT2.py` # the version of trying to use GPT2 as the joke generator, without the detector<br/>
+> │─ `GPT2_generator_BERT_detector.py` # the final version of joke generator (GPT2) and detector (BERT)<br/>
+> │─ `README.md`<br/>
+> │─ `tree.txt` # the tree structure of this repository<br/>
+> │  <br/>
+> └─ dataset # dataset used in this repository<br/>
+> &nbsp;&nbsp;&nbsp;&nbsp; │─ `dev-middle.csv` **<br/>
+> &nbsp;&nbsp;&nbsp;&nbsp; │─ `dev-small.csv` **<br/>
+> &nbsp;&nbsp;&nbsp;&nbsp; │─ `dev.csv` *<br/>
+> &nbsp;&nbsp;&nbsp;&nbsp; └─ `shortjokes.csv` ***<br/>
 
 Tip*: This dataset is cited from a paper [The rJokes dataset: a large scale humor collection](https://aclanthology.org/2020.lrec-1.753/)
 ```
@@ -62,7 +62,7 @@ Tip*: This dataset is cited from a paper [The rJokes dataset: a large scale humo
   year={2020}
 }
 ```
-Tip**: These two datasets are preprocessed by the group member [Jiayu Zhang](https://github.com/zjy2414).
+Tip**: These two datasets are preprocessed by the group member [Jiayu Zhang](https://github.com/zjy2414).<br/>
 Tip***: It is provided by this module.
 
 ## What libraries does your environment need?
@@ -86,9 +86,9 @@ To be specific, I installed `pytorch` by using the following command with specif
 conda install pytorch==1.12.1 torchvision==0.13.1 torchaudio==0.12.1 cudatoolkit=11.3 -c pytorch
 ```
 
-Tip**: This library is Python's built-in standard library.
-Tip***: It aims to show the process bar during training and evaluating models.
-Tip****: Using this library to create the datasets.
+Tip**: This library is Python's built-in standard library.<br/>
+Tip***: It aims to show the process bar during training and evaluating models.<br/>
+Tip****: Using this library to create the datasets.<br/>
 Tip*****: It aims to show images of losses for the generator and detector in the form of pyplot-style.
 
 ## The inspiration for the project
