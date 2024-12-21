@@ -6,7 +6,7 @@ This is the coursework of COMP4132 Advanced Topics in Machine Learning (2024-202
 ## Why do we have two GitHub repositories?
 This repository aims to train and test the joke generator and detector using the GPT2 and BERT models (see the section [The inspiration for the project](#inspiration)). 
 
-Another repository seeks to train and test the joke generator and detector using a Trainer provided by the Huggingface.
+Another repository seeks to train and test the joke generator and detector using a Transformer-based model and pre-trained models using the Trainer provided by the Huggingface.
 
 ---
 
