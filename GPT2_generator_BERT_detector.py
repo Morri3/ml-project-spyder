@@ -4,7 +4,7 @@ Created on Sun Dec 15 19:39:47 2024
 
 @author: Yiqian Zhang
 
-Generator and Detector (Pytorch Neural Network architecture version)
+Generator and Detector
 """
 from transformers import GPT2Tokenizer, GPT2LMHeadModel, BertForSequenceClassification, BertTokenizer
 import torch
@@ -57,7 +57,7 @@ class GeneratorDataset(Dataset):
 class DetectorDataset(Dataset):
   """
     define the dataset for the detector
-  
+
     This is a dataset class, including initialization, loading data from csv, 
     obtaining the length of the data and providing a method for returning one 
     item on the index.
@@ -67,7 +67,7 @@ class DetectorDataset(Dataset):
 
   # obtain jokes from the csv
   def loadJokes(self):
-    csvData = pd.read_csv('dev-middle.csv')
+    csvData = pd.read_csv('dev-small.csv')
     text=csvData["text"].astype(str).tolist() # convert to a string list
     humor=csvData["humor"].astype(int).tolist() # convert to a integer list (instead of bool)
     return Dataset.from_dict({"text": text, "label": humor})
@@ -87,8 +87,8 @@ detector_dataSet = DetectorDataset()
 print("Detector dataSet's basic info: ", detector_dataSet.listOfJokes)
 
 ## 3-1. get the train_dataset, test_dataset and validation_dataset (generator)
-# 1)obtain the first 4% of the original data as the dataset to be used (used for the dataset 'shortjokes.csv')
-small_size = int(len(dataSet) * 0.04)
+# 1)obtain the first 2% of the original data as the dataset to be used (used for the dataset 'shortjokes.csv')
+small_size = int(len(dataSet) * 0.02)
 small_dataSet = dataSet[:small_size]
 # 2)split datasets randomly (using 'random_split' method)
 train_data_size = int(len(small_dataSet['text']) * 0.8)
@@ -361,7 +361,7 @@ test_generator("Who", generated)
 test_generator("Why", generated)
 test_generator("Where", generated)
 
-## 14. verify whether the generated sentences are jokes (using ‎BertForSequenceClassification model)
+## 14. verify whether the generated sentences are jokes (using BertForSequenceClassification model)
 # 1) define the tokenizer for the detector
 detector_tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
 
@@ -407,7 +407,7 @@ else:
 
 # 5) define hyperparameters
 learning_rate_detector = 1e-4
-epochs_detector = 3
+epochs_detector = 5
 criterion = nn.CrossEntropyLoss() # loss function
 optimizer_detector = optim.AdamW(detector_model.parameters(), lr=learning_rate_detector) # optimizer
 
@@ -513,10 +513,10 @@ def evaluate_detector(model, tokenizer, data_loader, epochs):
           label_ids = inputs['label'][j].unsqueeze(0).to(device) # use unsqueeze() to convert a scalar tensor into a tensor with shape (batch_size,)
           # 3)get the output and loss
           loss, outputs = model(input_ids, attention_mask, token_type_ids, label_ids) # equals to calling model.forward()
-          losses.append(loss.repeat(batch_size)) # repeat batch_size times to enable each input in the current batch to have the loss
+          losses.append(loss.repeat(batch_size_detector)) # repeat batch_size times to enable each input in the current batch to have the loss
           evaluate_detector_losses.append(loss.cpu()) # move to the CPU
     losses = torch.cat(losses) # in each input, concat each loss tensor into one tensor
-    losses = losses[: len(validation_dataSet)] # guarantee the number of losses ​​corresponds to the number of samples in the evaluation dataset
+    losses = losses[: len(validation_dataSet_detector)] # guarantee the number of losses ​​corresponds to the number of samples in the evaluation dataset
     
     # 4)compute the perplexity
     try:
