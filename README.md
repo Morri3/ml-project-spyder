@@ -4,7 +4,7 @@ This is the coursework of COMP4132 Advanced Topics in Machine Learning (2024-202
 ---
 
 ## Why do we have two GitHub repositories?
-This repository aims to train and test the joke generator and detector using the GPT2 and BERT models in the form of Pytorch Neural Network architecture (see the section [The inspiration for the project](#inspiration)). 
+This repository aims to train and test the joke generator and detector using the GPT2 and BERT models (see the section [The inspiration for the project](#inspiration)). 
 
 Another repository seeks to train and test the joke generator and detector using a Trainer provided by the Huggingface.
 
@@ -36,7 +36,7 @@ In this repository, each code is run independently. Here is its structure using 
 > │&nbsp;&nbsp;&nbsp;&nbsp;└─ `shortjokes.csv` ***<br/>
 > │      <br/>
 > └─tmp_train_process # used during the project, not used in the final version<br/>
-> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ `BERT_no_trainer.py` **** # the initial version of trying to use BERT as the joke generator in the form of Pytorch Neural Network architecture, without the detector<br/>
+> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ `BERT_no_trainer.py` **** # the initial version of trying to use BERT as the joke generator, without the detector<br/>
 > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ `Generator_trainer.py` **** # trying to use Trainer to train the GPT2 (taken as the joke generator), without the detector<br/>
 
 Tip*: This dataset is cited from a paper [The rJokes dataset: a large scale humor collection](https://aclanthology.org/2020.lrec-1.753/)
