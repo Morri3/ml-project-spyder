@@ -6,7 +6,7 @@ This is the coursework of COMP4132 Advanced Topics in Machine Learning (2024-202
 ## Why do we have two GitHub repositories?
 This repository aims to train and test the joke generator and detector using the GPT2 and BERT models in the form of Pytorch Neural Network architecture (see the section [The inspiration for the project](#inspiration)). 
 
-Another repository seeks to train and test the joke generator and detector by using a Trainer provided by the Huggingface.
+Another repository seeks to train and test the joke generator and detector using a Trainer provided by the Huggingface.
 
 ---
 
@@ -37,7 +37,7 @@ In this repository, each code is run independently. Here is its structure using 
 > │      <br/>
 > └─tmp_train_process # used during the project, not used in the final version<br/>
 > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ `BERT_no_trainer.py` **** # the initial version of trying to use BERT as the joke generator in the form of Pytorch Neural Network architecture, without the detector<br/>
-> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ `Generator_trainer.py` **** # trying to use Trainer to train the GPT2 (taken as the joke generator), without the detector<br/>
+> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ `Generator_trainer.py` **** # trying to use Trainer to train the GPT2 (taken as the joke generator), without the detector<br/>
 
 Tip*: This dataset is cited from a paper [The rJokes dataset: a large scale humor collection](https://aclanthology.org/2020.lrec-1.753/)
 ```
@@ -51,13 +51,13 @@ Tip*: This dataset is cited from a paper [The rJokes dataset: a large scale humo
 ```
 Tip**: These two datasets are preprocessed by the group member [Jiayu Zhang](https://github.com/zjy2414).<br/>
 Tip***: It is provided by this module.<br/>
-Tip****: **(IMPORTANT!)** 
-Because these two codes used before the final version and they need to use the BERT model downloaded to the local environment, I uploaded the compressed package to Baidu Netdisk, please download it through [this](https://pan.baidu.com/s/1Wh1RvZ1POHLQ8gr9JKlUcw?pwd=1111); or I recommend downloading the `bert-base-cased` model from the [Hugging Face](https://huggingface.co/google-bert/bert-base-cased).
+Tip****: **(It is important if you want to run the codes before the final version of models.)** 
+Because these two codes were used before the final version and they need to use the BERT model downloaded to the local environment, I uploaded the compressed package to Baidu Netdisk, please download it through [this link](https://pan.baidu.com/s/1Wh1RvZ1POHLQ8gr9JKlUcw?pwd=1111), or I recommend downloading the `bert-base-cased` model from the [Hugging Face](https://huggingface.co/google-bert/bert-base-cased).
 
 ---
 
 ## What libraries does your environment need?
-Here I list required libraries for each code file. You can install these libraries through conda or pip.
+Here I list the required libraries for each code file. You can install these libraries through conda or pip.
 
 * transformers==4.24.0
 * cudatoolkit==11.3.1 *
@@ -69,7 +69,7 @@ Here I list required libraries for each code file. You can install these librari
 * datasets==2.6.1 ****
 * matplotlib==3.5.3 *****
 
-Tip*: In order to use available GPU resources, according to [tutorial](https://blog.csdn.net/weixin_46446479/article/details/139004738), it is significant to install `cudatoolkit` library (we can consider it as the **conda version** of `cuda`) **at first**. **After that**, we should go to the offical website of the [Pytorch](https://pytorch.org/get-started/locally/) to install `pytorch` and related libraries.
+Tip*: In order to use available GPU resources, according to [tutorial](https://blog.csdn.net/weixin_46446479/article/details/139004738), it is significant to install `cudatoolkit` library (we can consider it as the **conda version** of `cuda`) **at first**. **After that**, we should go to the official website of [Pytorch](https://pytorch.org/get-started/locally/) to install `pytorch` and related libraries.
 
 To be specific, I installed `pytorch` by using the following command with specific versions:
 
@@ -80,7 +80,7 @@ conda install pytorch==1.12.1 torchvision==0.13.1 torchaudio==0.12.1 cudatoolkit
 Tip**: It is Python's built-in standard library.<br/>
 Tip***: It aims to show the process bar during training and evaluating models.<br/>
 Tip****: Using this library to create the datasets.<br/>
-Tip*****: Aiming to show images of losses for the generator and detector in the form of pyplot-style.
+Tip*****: Aim to show images of losses for the generator and detector in the form of pyplot-style.
 
 * Besides, `Spyder`'s version is 5.3.3.
 
@@ -88,20 +88,20 @@ Tip*****: Aiming to show images of losses for the generator and detector in the 
 
 ## The inspiration for the project   <a id="inspiration"></a>
 ### Code style
-In this repository, I coded in the form of **Pytorch Neural Network architecture**.
+In this repository, I referred to the model-building framework of the Pytorch tutorial in the lab.
 
 At the beginning of the project, I tried to use this code style because, during the whole module, this style gave me a clear understanding of the training and validation procedure, making the code more readable and structured.
 
-However, it may be better to use the `Trainer` provided by the [Hugging Face](https://huggingface.co/) to train the models, because it encapsulates the process of training the model, validating and evaluating the model and we should only input the parameters that it needs.
+However, it may be a good choice to use the `Trainer` provided by the [Hugging Face](https://huggingface.co/) to train the models, because it encapsulates the process of training the model, validating and evaluating the model and we should only input the parameters that it needs.
 
-As for me, the form of **Pytorch Neural Network architecture** is good for letting users understand how the model is trained and how to adjust hyperparameters to achieve a better performance. As a result, I kept this code style.
+As for me, this coding style is pretty good for letting users understand how the model is trained and how to adjust hyperparameters to achieve better performance. As a result, I kept this code style.
 
 ### References
 1. The coding style
 > From this module's materials (labs and lectures)
 
 2. https://github.com/google-research/bert
-> Official github repository of `BERT`
+> Official GitHub repository of `BERT`
 
 3. https://www.zhihu.com/tardis/bd/art/406240067?source_id=1001
 > Interpretation of the `BERT` model (**TWO** pre-training tasks: **Masked Language Model** and **Next Sentence Prediction**)
@@ -167,7 +167,10 @@ As for me, the form of **Pytorch Neural Network architecture** is good for letti
 > Solve the problem: RuntimeError: Can't call numpy() on Tensor that requires grad. Use tensor.detach().numpy() instead.
 
 24. https://blog.csdn.net/MasterFT/article/details/1671672?spm=1001.2101.3001.6650.5&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-5-1671672-blog-127648136.235%5Ev43%5Epc_blog_bottom_relevance_base3&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-5-1671672-blog-127648136.235%5Ev43%5Epc_blog_bottom_relevance_base3&utm_relevant_index=10
-> Using `tree` to generate the tree structure of the github repository.
+> Using `tree` to generate the tree structure of the GitHub repository.
 
 25. https://blog.csdn.net/wuShiJingZuo/article/details/141160800
 > Python comment specification.
+
+26. https://insightcivic.s3.us-east-1.amazonaws.com/language-models.pdf
+> **The paper of the `GPT-2` model**.
