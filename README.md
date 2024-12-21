@@ -14,7 +14,7 @@ Another repository seeks to train and test the joke generator and detector using
 ### Spyder (Strongly recommended)
     
 1) Open the Spyder (you can open it through Anaconda).
-2) Open the code file (anyone you want to run and test).
+2) Open the code file.
 3) Install required libraries.
 4) Click the green play button to run the code.
 5) Wait and see the results.
