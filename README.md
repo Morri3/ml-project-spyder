@@ -88,13 +88,13 @@ Tip*****: Aim to show images of losses for the generator and detector in the for
 
 ## The inspiration for the project   <a id="inspiration"></a>
 ### Code style
-In this repository, I coded in the form of **Pytorch Neural Network architecture**.
+In this repository, I referred to the model-building framework of the Pytorch tutorial in the lab.
 
 At the beginning of the project, I tried to use this code style because, during the whole module, this style gave me a clear understanding of the training and validation procedure, making the code more readable and structured.
 
-However, it may be better to use the `Trainer` provided by the [Hugging Face](https://huggingface.co/) to train the models, because it encapsulates the process of training the model, validating and evaluating the model and we should only input the parameters that it needs.
+However, it may be a good choice to use the `Trainer` provided by the [Hugging Face](https://huggingface.co/) to train the models, because it encapsulates the process of training the model, validating and evaluating the model and we should only input the parameters that it needs.
 
-As for me, the form of **Pytorch Neural Network architecture** is good for letting users understand how the model is trained and how to adjust hyperparameters to achieve better performance. As a result, I kept this code style.
+As for me, this coding style is pretty good for letting users understand how the model is trained and how to adjust hyperparameters to achieve better performance. As a result, I kept this code style.
 
 ### References
 1. The coding style
@@ -171,3 +171,6 @@ As for me, the form of **Pytorch Neural Network architecture** is good for letti
 
 25. https://blog.csdn.net/wuShiJingZuo/article/details/141160800
 > Python comment specification.
+
+26. https://insightcivic.s3.us-east-1.amazonaws.com/language-models.pdf
+> **The paper of the `GPT-2` model**.
