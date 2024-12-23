@@ -9,6 +9,11 @@ Due to file size limitations, we don't put the 'shortjokes.csv' in the final com
 
 ---
 
+## Final models
+See [link](https://pan.baidu.com/s/1CRDPOrdokvqk_lqdSGTWKQ?pwd=1111).
+
+---
+
 ## Why do we have two GitHub repositories?
 This repository aims to train and test the joke generator and detector using the GPT2 and BERT models (see the section [The inspiration for the project](#inspiration)). 
 
