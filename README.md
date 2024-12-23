@@ -3,6 +3,12 @@ This is the coursework of COMP4132 Advanced Topics in Machine Learning (2024-202
 
 ---
 
+## About our datasets? (IMPORTANT!!!)
+In the project, we use 'shortjokes.csv', 'dev.csv' and its related versions.
+Due to file size limitations, we don't put the 'shortjokes.csv' in the final compressed package. You can get the 'shortjokes.csv' [here](https://www.kaggle.com/datasets/abhinavmoudgil95/short-jokes/).
+
+---
+
 ## Why do we have two GitHub repositories?
 This repository aims to train and test the joke generator and detector using the GPT2 and BERT models (see the section [The inspiration for the project](#inspiration)). 
 
